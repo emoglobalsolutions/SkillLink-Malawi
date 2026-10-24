@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#103d32">
+  <meta name="description" content="Discover trusted service providers in Malawi. Find designers, photographers, technicians, developers and more with SkillLink Malawi.">
+  <title>SkillLink Malawi | Find Skills. Hire Talent.</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="SkillLink Malawi home">
+      <span class="brand-icon">S</span>
+      <span>SkillLink<span class="brand-accent"> Malawi</span></span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#categories">Categories</a>
+      <a href="#providers">Find professionals</a>
+      <a href="#how-it-works">How it works</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="btn btn-outline" id="loginBtn">Log in</button>
+      <button class="btn btn-primary" id="joinBtn">Join as a provider</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <span class="eyebrow"><span class="live-dot"></span> MALAWI'S SKILLS MARKETPLACE</span>
+        <h1>Find the right skills.<br><span>Get things done.</span></h1>
+        <p class="hero-description">
+          Discover talented professionals and local service providers.
+          From creative work to technical services, find the people you need.
+        </p>
+
+        <form class="search-bar" id="searchForm">
+          <label class="search-field">
+            <span aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search"
+              placeholder="What service do you need?"
+              aria-label="Search services or professionals">
+          </label>
+          <select id="locationFilter" aria-label="Filter by district">
+            <option value="">All locations</option>
+            <option>Lilongwe</option>
+            <option>Blantyre</option>
+            <option>Mzuzu</option>
+            <option>Kasungu</option>
+            <option>Zomba</option>
+            <option>Salima</option>
+          </select>
+          <button class="btn btn-primary search-btn" type="submit">Search</button>
+        </form>
+
+        <div class="popular-searches">
+          <span>Popular:</span>
+          <button class="text-link" data-search="Graphic Design">Graphic design</button>
+          <button class="text-link" data-search="Photography">Photography</button>
+          <button class="text-link" data-search="Web Development">Web development</button>
+        </div>
+
+        <div class="hero-trust">
+          <span class="trust-check">✓</span>
+          Discover local talent
+          <span class="trust-separator">·</span>
+          Connect directly
+          <span class="trust-separator">·</span>
+          Grow together
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-label="Illustration of a professional service marketplace">
+        <div class="visual-glow"></div>
+        <div class="floating-card card-top">
+          <span class="mini-icon">✦</span>
+          <span><strong>Local talent</strong><small>Skills across Malawi</small></span>
+        </div>
+        <div class="hero-art">
+          <div class="art-circle"></div>
+          <div class="art-person">
+            <div class="person-head"></div>
+            <div class="person-body"></div>
+            <div class="person-arm"></div>
+          </div>
+          <div class="art-spark spark-one">✦</div>
+          <div class="art-spark spark-two">✳</div>
+          <div class="art-base"></div>
+        </div>
+        <div class="floating-card card-bottom">
+          <span class="online-dot"></span>
+          <span><strong>Your next connection</strong><small>Starts here.</small></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-strip" aria-label="Platform benefits">
+      <div><strong>One platform</strong><span>Many skills</span></div>
+      <div><strong>Local discovery</strong><span>Find services near you</span></div>
+      <div><strong>Direct connection</strong><span>Talk to providers</span></div>
+      <div><strong>More opportunities</strong><span>Grow your business</span></div>
+    </section>
+
+    <section class="section" id="categories">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">EXPLORE SERVICES</span>
+          <h2>What do you need done?</h2>
+          <p>Explore services offered by skilled people and businesses.</p>
+        </div>
+        <a href="#providers" class="arrow-link">Explore professionals <span>↗</span></a>
+      </div>
+
+      <div class="category-grid">
+        <button class="category-card" data-category="Graphic Design">
+          <span class="category-icon icon-design">✳</span>
+          <strong>Graphic Design</strong>
+          <span>Logos, flyers and branding</span>
+        </button>
+        <button class="category-card" data-category="Web Development">
+          <span class="category-icon icon-tech">⌘</span>
+          <strong>Web & Technology</strong>
+          <span>Websites, apps and ICT</span>
+        </button>
+        <button class="category-card" data-category="Photography">
+          <span class="category-icon icon-photo">◉</span>
+          <strong>Photography & Video</strong>
+          <span>Events, portraits and films</span>
+        </button>
+        <button class="category-card" data-category="Home Services">
+          <span class="category-icon icon-home">⌂</span>
+          <strong>Home Services</strong>
+          <span>Repairs and maintenance</span>
+        </button>
+        <button class="category-card" data-category="Beauty">
+          <span class="category-icon icon-beauty">✿</span>
+          <strong>Beauty & Fashion</strong>
+          <span>Style, grooming and tailoring</span>
+        </button>
+        <button class="category-card" data-category="Education">
+          <span class="category-icon icon-education">▤</span>
+          <strong>Education & Tutoring</strong>
+          <span>Lessons and training</span>
+        </button>
+        <button class="category-card" data-category="Events">
+          <span class="category-icon icon-events">♬</span>
+          <strong>Events & Entertainment</strong>
+          <span>DJs, MCs and event services</span>
+        </button>
+        <button class="category-card" data-category="Business Services">
+          <span class="category-icon icon-business">↗</span>
+          <strong>Business Services</strong>
+          <span>Marketing and consulting</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="section providers-section" id="providers">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">DISCOVER LOCAL TALENT</span>
+          <h2>Professionals to explore</h2>
+          <p>Browse our example listings and discover the possibilities.</p>
+        </div>
+        <span class="demo-label">DEMO LISTINGS</span>
+      </div>
+
+      <div class="provider-toolbar">
+        <span id="resultsCount">6 example profiles</span>
+        <select id="sortFilter" aria-label="Sort profiles">
+          <option value="default">Recommended</option>
+          <option value="name">Name: A–Z</option>
+        </select>
+      </div>
+
+      <div class="provider-grid" id="providerGrid">
+        <article class="provider-card"
+          data-name="Creative Design Studio"
+          data-category="Graphic Design"
+          data-location="Lilongwe"
+          data-skills="logos flyers branding posters">
+          <div class="provider-cover cover-design"><span>CREATIVE<br>STUDIO</span></div>
+          <div class="provider-details">
+            <div class="provider-title">
+              <h3>Creative Design Studio</h3><span class="verified" title="Demo badge">✓</span>
+            </div>
+            <p class="provider-category">Graphic Design</p>
+            <p class="provider-location">⌖ Lilongwe</p>
+            <p class="provider-description">Brand identities, flyers, posters and social media designs.</p>
+            <div class="provider-footer">
+              <span class="price">From MWK 15,000</span>
+              <button class="btn btn-small btn-outline contact-btn" data-provider="Creative Design Studio">View profile</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="provider-card"
+          data-name="Pixel Web Solutions"
+          data-category="Web Development"
+          data-location="Blantyre"
+          data-skills="websites apps hosting development">
+          <div class="provider-cover cover-tech"><span>&lt;/&gt;<br>PIXEL</span></div>
+          <div class="provider-details">
+            <div class="provider-title"><h3>Pixel Web Solutions</h3></div>
+            <p class="provider-category">Web Development</p>
+            <p class="provider-location">⌖ Blantyre</p>
+            <p class="provider-description">Modern websites, business portals and digital solutions.</p>
+            <div class="provider-footer">
+              <span class="price">Request a quote</span>
+              <button class="btn btn-small btn-outline contact-btn" data-provider="Pixel Web Solutions">View profile</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="provider-card"
+          data-name="Lens & Light Media"
+          data-category="Photography"
+          data-location="Mzuzu"
+          data-skills="photography video wedding events">
+          <div class="provider-cover cover-photo"><span>LENS<br>& LIGHT</span></div>
+          <div class="provider-details">
+            <div class="provider-title"><h3>Lens & Light Media</h3></div>
+            <p class="provider-category">Photography & Video</p>
+            <p class="provider-location">⌖ Mzuzu</p>
+            <p class="provider-description">Portraits, event coverage and professional video production.</p>
+            <div class="provider-footer">
+              <span class="price">Request a quote</span>
+              <button class="btn btn-small btn-outline contact-btn" data-provider="Lens & Light Media">View profile</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="provider-card"
+          data-name="Trusted Home Repairs"
+          data-category="Home Services"
+          data-location="Kasungu"
+          data-skills="plumbing electrical repairs maintenance">
+          <div class="provider-cover cover-home"><span>HOME<br>REPAIRS</span></div>
+          <div class="provider-details">
+            <div class="provider-title"><h3>Trusted Home Repairs</h3></div>
+            <p class="provider-category">Home Services</p>
+            <p class="provider-location">⌖ Kasungu</p>
+            <p class="provider-description">General maintenance and home repair enquiries.</p>
+            <div class="provider-footer">
+              <span class="price">Request a quote</span>
+              <button class="btn btn-small btn-outline contact-btn" data-provider="Trusted Home Repairs">View profile</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="provider-card"
+          data-name="SmartLearn Tutors"
+          data-category="Education"
+          data-location="Zomba"
+          data-skills="ict computer lessons tutoring education">
+          <div class="provider-cover cover-education"><span>LEARN<br>GROW</span></div>
+          <div class="provider-details">
+            <div class="provider-title"><h3>SmartLearn Tutors</h3></div>
+            <p class="provider-category">Education & Tutoring</p>
+            <p class="provider-location">⌖ Zomba</p>
+            <p class="provider-description">ICT training, computer lessons and academic support.</p>
+            <div class="provider-footer">
+              <span class="price">Request a quote</span>
+              <button class="btn btn-small btn-outline contact-btn" data-provider="SmartLearn Tutors">View profile</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="provider-card"
+          data-name="Elite Events Crew"
+          data-category="Events"
+          data-location="Lilongwe"
+          data-skills="dj mc sound events entertainment">
+          <div class="provider-cover cover-events"><span>ELITE<br>EVENTS</span></div>
+          <div class="provider-details">
+            <div class="provider-title"><h3>Elite Events Crew</h3></div>
+            <p class="provider-category">Events & Entertainment</p>
+            <p class="provider-location">⌖ Lilongwe</p>
+            <p class="provider-description">Event coordination, DJ and sound service enquiries.</p>
+            <div class="provider-footer">
+              <span class="price">Request a quote</span>
+              <button class="btn btn-small btn-outline contact-btn" data-provider="Elite Events Crew">View profile</button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <p class="empty-state" id="emptyState" hidden>
+        No matching example profiles found. Try another service or location.
+      </p>
+    </section>
+
+    <section class="how-section" id="how-it-works">
+      <div class="section-heading centered-heading">
+        <div>
+          <span class="eyebrow">SIMPLE BY DESIGN</span>
+          <h2>How SkillLink works</h2>
+          <p>One platform. Three simple steps.</p>
+        </div>
+      </div>
+      <div class="steps-grid">
+        <article class="step-card">
+          <span class="step-number">01</span>
+          <h3>Find a service</h3>
+          <p>Search by skill, category or location to discover relevant providers.</p>
+        </article>
+        <article class="step-card">
+          <span class="step-number">02</span>
+          <h3>Compare professionals</h3>
+          <p>Review service details, portfolios, experience and available contact options.</p>
+        </article>
+        <article class="step-card">
+          <span class="step-number">03</span>
+          <h3>Connect directly</h3>
+          <p>Discuss the job, agree on terms and arrange the service with your provider.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="join-section">
+      <div>
+        <span class="eyebrow">YOUR SKILLS HAVE VALUE</span>
+        <h2>Turn your skills into opportunities.</h2>
+        <p>Get ready to showcase your services and connect with potential customers.</p>
+      </div>
+      <button class="btn btn-light" id="bottomJoinBtn">Become a service provider ↗</button>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand footer-brand" href="#">
+      <span class="brand-icon">S</span>
+      <span>SkillLink<span class="brand-accent"> Malawi</span></span>
+    </a>
+    <p>Connecting skills. Creating opportunities.</p>
+    <p class="footer-note">A project by Emo Global Solutions.</p>
+    <p class="copyright">© <span id="year"></span> SkillLink Malawi. All rights reserved.</p>
+  </footer>
+
+  <dialog id="infoDialog" class="info-dialog">
+    <form method="dialog">
+      <button class="dialog-close" aria-label="Close">×</button>
+    </form>
+    <div id="dialogContent"></div>
+  </dialog>
+</body>
+</html>
