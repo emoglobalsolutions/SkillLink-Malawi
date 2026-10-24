@@ -1,6 +1,9 @@
 
 "use strict";
 
+const SUPABASE_URL = "https://dhlwmbvaxrqbtqxqyjwn.supabase.co/rest/v1/";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YjsSVrcHTHmRxTfjN86d9g_eHccI-OZ";
+
 document.addEventListener("DOMContentLoaded", () => {
   const searchForm = document.getElementById("searchForm");
   const searchInput = document.getElementById("searchInput");
