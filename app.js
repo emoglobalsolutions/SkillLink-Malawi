@@ -3,6 +3,10 @@
 
 const SUPABASE_URL = "https://dhlwmbvaxrqbtqxqyjwn.supabase.co/rest/v1/";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YjsSVrcHTHmRxTfjN86d9g_eHccI-OZ";
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
 
 document.addEventListener("DOMContentLoaded", () => {
   const searchForm = document.getElementById("searchForm");
