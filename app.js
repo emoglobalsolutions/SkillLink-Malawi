@@ -8,6 +8,26 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_PUBLISHABLE_KEY
 );
 
+document.addEventListener("DOMContentLoaded", async () => {
+  const status = document.createElement("p");
+  status.textContent = "Testing Supabase connection...";
+  status.style.cssText =
+    "padding:12px;margin:12px;background:#e8f5e9;color:#14532d;";
+  document.body.prepend(status);
+
+  const { data, error } = await supabaseClient
+    .from("service_categories")
+    .select("name")
+    .limit(1);
+
+  if (error) {
+    status.textContent =
+      "Supabase connection test failed: " + error.message;
+  } else {
+    status.textContent =
+      "Supabase connected! Categories table is responding.";
+  }
+});
 document.addEventListener("DOMContentLoaded", () => {
   const searchForm = document.getElementById("searchForm");
   const searchInput = document.getElementById("searchInput");
