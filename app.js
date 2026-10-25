@@ -1,34 +1,23 @@
 
 "use strict";
 
+// ========================================
+// SUPABASE CONFIGURATION
+// Fill in your actual values below.
+// ========================================
 const SUPABASE_URL = "https://dhlwmbvaxrqbtqxqyjwn.supabase.co/rest/v1/";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YjsSVrcHTHmRxTfjN86d9g_eHccI-OZ";
+
+// Create the Supabase client
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const status = document.createElement("p");
-  status.textContent = "Testing Supabase connection...";
-  status.style.cssText =
-    "padding:12px;margin:12px;background:#e8f5e9;color:#14532d;";
-  document.body.prepend(status);
-
-  const { data, error } = await supabaseClient
-    .from("service_categories")
-    .select("name")
-    .limit(1);
-
-  if (error) {
-    status.textContent =
-      "Supabase connection test failed: " + error.message;
-  } else {
-    status.textContent =
-      "Supabase connected! Categories table is responding.";
-  }
-});
 document.addEventListener("DOMContentLoaded", () => {
+  // ========================================
+  // PAGE ELEMENTS
+  // ========================================
   const searchForm = document.getElementById("searchForm");
   const searchInput = document.getElementById("searchInput");
   const locationFilter = document.getElementById("locationFilter");
@@ -39,8 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const infoDialog = document.getElementById("infoDialog");
   const dialogContent = document.getElementById("dialogContent");
 
-  // Replace this with your official business WhatsApp number
-  // when you are ready to accept real enquiries.
+  // Add your official business WhatsApp number later.
+  // Use international digits without the + sign.
   const BUSINESS_WHATSAPP = "";
 
   const cards = Array.from(
@@ -52,6 +41,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let activeCategory = "";
 
+  // ========================================
+  // SUPABASE CONNECTION TEST
+  // ========================================
+  const status = document.createElement("p");
+  status.textContent = "Checking database connection...";
+  status.setAttribute("role", "status");
+  status.style.cssText =
+    "padding:12px;margin:12px;background:#e8f5e9;color:#14532d;border-radius:8px;";
+  document.body.prepend(status);
+
+  async function testSupabaseConnection() {
+    try {
+      const { error } = await supabaseClient
+        .from("service_categories")
+        .select("name")
+        .limit(1);
+
+      if (error) {
+        console.error("Supabase database test:", error);
+        status.textContent =
+          "Database test failed: " + error.message;
+        status.style.background = "#fee2e2";
+        status.style.color = "#991b1b";
+        return;
+      }
+
+      status.textContent =
+        "Success! Supabase database is responding.";
+      status.style.background = "#dcfce7";
+      status.style.color = "#166534";
+    } catch (error) {
+      console.error("Supabase connection error:", error);
+      status.textContent =
+        "Connection error: " +
+        (error.message || "Please check your URL and connection.");
+      status.style.background = "#fee2e2";
+      status.style.color = "#991b1b";
+    }
+  }
+
+  testSupabaseConnection();
+
+  // ========================================
+  // HELPER FUNCTIONS
+  // ========================================
   function normalize(value) {
     return String(value || "").trim().toLowerCase();
   }
@@ -66,11 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
     })[character]);
   }
 
+  // ========================================
+  // SEARCH, FILTER AND SORT PROVIDERS
+  // ========================================
   function filterProviders() {
     const query = normalize(searchInput.value);
     const district = normalize(locationFilter.value);
-
-    let visibleCards = [];
+    const visibleCards = [];
 
     cards.forEach(card => {
       const name = normalize(card.dataset.name);
@@ -133,7 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   locationFilter.addEventListener("change", filterProviders);
   sortFilter.addEventListener("change", filterProviders);
-
   searchInput.addEventListener("input", filterProviders);
 
   document.querySelectorAll("[data-search]").forEach(button => {
@@ -160,6 +195,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // ========================================
+  // DIALOG HELPER
+  // ========================================
   function openDialog(content) {
     dialogContent.innerHTML = content;
 
@@ -170,6 +208,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ========================================
+  // DEMO PROVIDER PROFILES
+  // ========================================
   document.querySelectorAll(".contact-btn").forEach(button => {
     button.addEventListener("click", () => {
       const card = button.closest(".provider-card");
@@ -201,6 +242,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // ========================================
+  // ENQUIRY FORM
+  // ========================================
   function showEnquiryForm(providerName, category) {
     openDialog(`
       <span class="eyebrow">SERVICE ENQUIRY</span>
@@ -227,8 +271,8 @@ document.addEventListener("DOMContentLoaded", () => {
         </button>
       </form>
       <p class="dialog-message">
-        Demo mode: this form does not save or send your personal
-        information to a server.
+        Demo mode: this form does not save or send your information
+        to a server.
       </p>
     `);
 
@@ -258,8 +302,6 @@ document.addEventListener("DOMContentLoaded", () => {
           message
         };
 
-        // Do not store enquiries in browser storage.
-        // A secure database endpoint will be added later.
         if (BUSINESS_WHATSAPP) {
           const text = [
             "SkillLink Malawi service enquiry",
@@ -298,6 +340,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
+  // ========================================
+  // PROVIDER REGISTRATION PREVIEW
+  // ========================================
   function showJoinForm() {
     openDialog(`
       <span class="eyebrow">JOIN OUR COMMUNITY</span>
@@ -352,8 +397,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </button>
       </form>
       <p class="dialog-message">
-        Demo only. Registration is not saved. Real accounts will
-        require secure authentication and database integration.
+        Demo only. Registration is not saved yet.
       </p>
     `);
 
@@ -366,7 +410,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const name = String(
           formData.get("providerName") || ""
         ).trim();
-        const email = String(formData.get("email") || "").trim();
+        const email = String(
+          formData.get("email") || ""
+        ).trim();
         const category = String(
           formData.get("category") || ""
         ).trim();
@@ -382,9 +428,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Service:</strong> ${escapeHTML(category)}</p>
           <p><strong>District:</strong> ${escapeHTML(location)}</p>
           <p class="dialog-message">
-            This information has not been saved. In the next phase,
-            we will connect registration to Supabase so providers
-            can securely create real accounts.
+            This information has not been saved. Real provider
+            registration will be enabled after authentication
+            and database setup are completed.
           </p>
         `);
       }
@@ -399,13 +445,16 @@ document.addEventListener("DOMContentLoaded", () => {
     "click", showJoinForm
   );
 
+  // ========================================
+  // LOGIN PLACEHOLDER
+  // ========================================
   document.getElementById("loginBtn").addEventListener(
     "click", () => {
       openDialog(`
         <span class="eyebrow">MEMBER ACCESS</span>
         <h2>Welcome to SkillLink</h2>
         <p>Secure customer and provider login will be enabled
-          when authentication is connected.</p>
+          in the next development phase.</p>
         <button class="btn btn-primary dialog-action"
           id="registerInstead">Join as a provider</button>
       `);
@@ -416,11 +465,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
+  // ========================================
+  // CLOSE DIALOG WHEN BACKGROUND IS TAPPED
+  // ========================================
   infoDialog.addEventListener("click", event => {
     if (event.target === infoDialog) {
       infoDialog.close();
     }
   });
 
+  // Show the initial demo profiles.
   filterProviders();
 });
