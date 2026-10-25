@@ -5,7 +5,7 @@
 // SUPABASE CONFIGURATION
 // Fill in your actual values below.
 // ========================================
-const SUPABASE_URL = "https://dhlwmbvaxrqbtqxqyjwn.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://dhlwmbvaxrqbtqxqyjwn.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YjsSVrcHTHmRxTfjN86d9g_eHccI-OZ";
 
 // Create the Supabase client
