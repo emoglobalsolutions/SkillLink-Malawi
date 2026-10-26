@@ -17,7 +17,7 @@
 
   <!-- Supabase JavaScript client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js?v=20261026-join-fix" defer></script>
+  <script src="app.js?v=20261026-join-fix2" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -56,19 +56,41 @@
 
         <form class="search-bar" id="searchForm">
           <label class="search-field">
-            <span aria-hidden="true">⌕</span>
+            <span aria-hidden="true">âŒ•</span>
             <input id="searchInput" type="search"
               placeholder="What service do you need?"
               aria-label="Search services or professionals">
           </label>
           <select id="locationFilter" aria-label="Filter by district">
             <option value="">All locations</option>
-            <option>Lilongwe</option>
+            <option>Balaka</option>
             <option>Blantyre</option>
-            <option>Mzuzu</option>
+            <option>Chikwawa</option>
+            <option>Chiradzulu</option>
+            <option>Chitipa</option>
+            <option>Dedza</option>
+            <option>Dowa</option>
+            <option>Karonga</option>
             <option>Kasungu</option>
-            <option>Zomba</option>
+            <option>Likoma</option>
+            <option>Lilongwe</option>
+            <option>Machinga</option>
+            <option>Mangochi</option>
+            <option>Mchinji</option>
+            <option>Mulanje</option>
+            <option>Mwanza</option>
+            <option>Mzimba</option>
+            <option>Neno</option>
+            <option>Nkhata Bay</option>
+            <option>Nkhotakota</option>
+            <option>Nsanje</option>
+            <option>Ntcheu</option>
+            <option>Ntchisi</option>
+            <option>Phalombe</option>
+            <option>Rumphi</option>
             <option>Salima</option>
+            <option>Thyolo</option>
+            <option>Zomba</option>
           </select>
           <button class="btn btn-primary search-btn" type="submit">Search</button>
         </form>
@@ -81,11 +103,11 @@
         </div>
 
         <div class="hero-trust">
-          <span class="trust-check">✓</span>
+          <span class="trust-check">âœ“</span>
           Discover local talent
-          <span class="trust-separator">·</span>
+          <span class="trust-separator">Â·</span>
           Connect directly
-          <span class="trust-separator">·</span>
+          <span class="trust-separator">Â·</span>
           Grow together
         </div>
       </div>
@@ -93,7 +115,7 @@
       <div class="hero-visual" aria-label="Illustration of a professional service marketplace">
         <div class="visual-glow"></div>
         <div class="floating-card card-top">
-          <span class="mini-icon">✦</span>
+          <span class="mini-icon">âœ¦</span>
           <span><strong>Local talent</strong><small>Skills across Malawi</small></span>
         </div>
         <div class="hero-art">
@@ -103,8 +125,8 @@
             <div class="person-body"></div>
             <div class="person-arm"></div>
           </div>
-          <div class="art-spark spark-one">✦</div>
-          <div class="art-spark spark-two">✳</div>
+          <div class="art-spark spark-one">âœ¦</div>
+          <div class="art-spark spark-two">âœ³</div>
           <div class="art-base"></div>
         </div>
         <div class="floating-card card-bottom">
@@ -128,47 +150,47 @@
           <h2>What do you need done?</h2>
           <p>Explore services offered by skilled people and businesses.</p>
         </div>
-        <a href="#providers" class="arrow-link">Explore professionals <span>↗</span></a>
+        <a href="#providers" class="arrow-link">Explore professionals <span>â†—</span></a>
       </div>
 
       <div class="category-grid">
         <button class="category-card" data-category="Graphic Design">
-          <span class="category-icon icon-design">✳</span>
+          <span class="category-icon icon-design">âœ³</span>
           <strong>Graphic Design</strong>
           <span>Logos, flyers and branding</span>
         </button>
         <button class="category-card" data-category="Web Development">
-          <span class="category-icon icon-tech">⌘</span>
+          <span class="category-icon icon-tech">âŒ˜</span>
           <strong>Web & Technology</strong>
           <span>Websites, apps and ICT</span>
         </button>
         <button class="category-card" data-category="Photography">
-          <span class="category-icon icon-photo">◉</span>
+          <span class="category-icon icon-photo">â—‰</span>
           <strong>Photography & Video</strong>
           <span>Events, portraits and films</span>
         </button>
         <button class="category-card" data-category="Home Services">
-          <span class="category-icon icon-home">⌂</span>
+          <span class="category-icon icon-home">âŒ‚</span>
           <strong>Home Services</strong>
           <span>Repairs and maintenance</span>
         </button>
         <button class="category-card" data-category="Beauty">
-          <span class="category-icon icon-beauty">✿</span>
+          <span class="category-icon icon-beauty">âœ¿</span>
           <strong>Beauty & Fashion</strong>
           <span>Style, grooming and tailoring</span>
         </button>
         <button class="category-card" data-category="Education">
-          <span class="category-icon icon-education">▤</span>
+          <span class="category-icon icon-education">â–¤</span>
           <strong>Education & Tutoring</strong>
           <span>Lessons and training</span>
         </button>
         <button class="category-card" data-category="Events">
-          <span class="category-icon icon-events">♬</span>
+          <span class="category-icon icon-events">â™¬</span>
           <strong>Events & Entertainment</strong>
           <span>DJs, MCs and event services</span>
         </button>
         <button class="category-card" data-category="Business Services">
-          <span class="category-icon icon-business">↗</span>
+          <span class="category-icon icon-business">â†—</span>
           <strong>Business Services</strong>
           <span>Marketing and consulting</span>
         </button>
@@ -189,7 +211,7 @@
         <span id="resultsCount">6 example profiles</span>
         <select id="sortFilter" aria-label="Sort profiles">
           <option value="default">Recommended</option>
-          <option value="name">Name: A–Z</option>
+          <option value="name">Name: Aâ€“Z</option>
         </select>
       </div>
 
@@ -202,10 +224,10 @@
           <div class="provider-cover cover-design"><span>CREATIVE<br>STUDIO</span></div>
           <div class="provider-details">
             <div class="provider-title">
-              <h3>Creative Design Studio</h3><span class="verified" title="Demo badge">✓</span>
+              <h3>Creative Design Studio</h3><span class="verified" title="Demo badge">âœ“</span>
             </div>
             <p class="provider-category">Graphic Design</p>
-            <p class="provider-location">⌖ Lilongwe</p>
+            <p class="provider-location">âŒ– Lilongwe</p>
             <p class="provider-description">Brand identities, flyers, posters and social media designs.</p>
             <div class="provider-footer">
               <span class="price">From MWK 15,000</span>
@@ -223,7 +245,7 @@
           <div class="provider-details">
             <div class="provider-title"><h3>Pixel Web Solutions</h3></div>
             <p class="provider-category">Web Development</p>
-            <p class="provider-location">⌖ Blantyre</p>
+            <p class="provider-location">âŒ– Blantyre</p>
             <p class="provider-description">Modern websites, business portals and digital solutions.</p>
             <div class="provider-footer">
               <span class="price">Request a quote</span>
@@ -241,7 +263,7 @@
           <div class="provider-details">
             <div class="provider-title"><h3>Lens & Light Media</h3></div>
             <p class="provider-category">Photography & Video</p>
-            <p class="provider-location">⌖ Mzuzu</p>
+            <p class="provider-location">âŒ– Mzuzu</p>
             <p class="provider-description">Portraits, event coverage and professional video production.</p>
             <div class="provider-footer">
               <span class="price">Request a quote</span>
@@ -259,7 +281,7 @@
           <div class="provider-details">
             <div class="provider-title"><h3>Trusted Home Repairs</h3></div>
             <p class="provider-category">Home Services</p>
-            <p class="provider-location">⌖ Kasungu</p>
+            <p class="provider-location">âŒ– Kasungu</p>
             <p class="provider-description">General maintenance and home repair enquiries.</p>
             <div class="provider-footer">
               <span class="price">Request a quote</span>
@@ -277,7 +299,7 @@
           <div class="provider-details">
             <div class="provider-title"><h3>SmartLearn Tutors</h3></div>
             <p class="provider-category">Education & Tutoring</p>
-            <p class="provider-location">⌖ Zomba</p>
+            <p class="provider-location">âŒ– Zomba</p>
             <p class="provider-description">ICT training, computer lessons and academic support.</p>
             <div class="provider-footer">
               <span class="price">Request a quote</span>
@@ -295,7 +317,7 @@
           <div class="provider-details">
             <div class="provider-title"><h3>Elite Events Crew</h3></div>
             <p class="provider-category">Events & Entertainment</p>
-            <p class="provider-location">⌖ Lilongwe</p>
+            <p class="provider-location">âŒ– Lilongwe</p>
             <p class="provider-description">Event coordination, DJ and sound service enquiries.</p>
             <div class="provider-footer">
               <span class="price">Request a quote</span>
@@ -343,7 +365,7 @@
         <h2>Turn your skills into opportunities.</h2>
         <p>Get ready to showcase your services and connect with potential customers.</p>
       </div>
-      <button class="btn btn-light" id="bottomJoinBtn" type="button">Become a service provider ↗</button>
+      <button class="btn btn-light" id="bottomJoinBtn" type="button">Become a service provider â†—</button>
     </section>
   </main>
 
@@ -354,12 +376,12 @@
     </a>
     <p>Connecting skills. Creating opportunities.</p>
     <p class="footer-note">A project by Emo Global Solutions.</p>
-    <p class="copyright">© <span id="year"></span> SkillLink Malawi. All rights reserved.</p>
+    <p class="copyright">Â© <span id="year"></span> SkillLink Malawi. All rights reserved.</p>
   </footer>
 
   <dialog id="infoDialog" class="info-dialog">
     <form method="dialog">
-      <button class="dialog-close" aria-label="Close">×</button>
+      <button class="dialog-close" aria-label="Close">Ã—</button>
     </form>
     <div id="dialogContent"></div>
   </dialog>
