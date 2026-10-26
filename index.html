@@ -1,11 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#103d32">
-  <meta name="description" content="Discover trusted service providers in Malawi. Find designers, photographers, technicians, developers and more with SkillLink Malawi.">
+  <meta name="description" content="Discover service providers across Malawi. Find creative professionals, developers, tutors, technicians and local businesses with SkillLink Malawi.">
+  <meta name="color-scheme" content="light">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SkillLink Malawi | Find Skills. Hire Talent.">
+  <meta property="og:description" content="Discover local talent, explore services and connect with professionals across Malawi.">
   <title>SkillLink Malawi | Find Skills. Hire Talent.</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,9 +17,10 @@
 
   <!-- Supabase JavaScript client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js" defer></script>
+  <script src="app.js?v=20261026-join-fix" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="#" aria-label="SkillLink Malawi home">
       <span class="brand-icon">S</span>
@@ -30,12 +34,17 @@
     </nav>
 
     <div class="header-actions">
-      <button class="btn btn-outline" id="loginBtn">Log in</button>
-      <button class="btn btn-primary" id="joinBtn">Join as a provider</button>
+      <button class="btn btn-outline" id="loginBtn" type="button" aria-live="polite">Log in</button>
+      <button class="btn btn-primary" id="joinBtn" type="button">Join as a provider</button>
     </div>
   </header>
 
-  <main>
+  <noscript>
+    <p style="padding:12px;margin:12px;background:#fff4cc;color:#664d03;border-radius:8px;">
+      SkillLink Malawi needs JavaScript enabled for search, account access and database features.
+    </p>
+  </noscript>
+  <main id="main-content">
     <section class="hero">
       <div class="hero-content">
         <span class="eyebrow"><span class="live-dot"></span> MALAWI'S SKILLS MARKETPLACE</span>
@@ -334,7 +343,7 @@
         <h2>Turn your skills into opportunities.</h2>
         <p>Get ready to showcase your services and connect with potential customers.</p>
       </div>
-      <button class="btn btn-light" id="bottomJoinBtn">Become a service provider ↗</button>
+      <button class="btn btn-light" id="bottomJoinBtn" type="button">Become a service provider ↗</button>
     </section>
   </main>
 
