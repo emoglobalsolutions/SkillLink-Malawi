@@ -2,6 +2,7 @@
 
 const SUPABASE_URL = "https://dhlwmbvaxrqbtqxqyjwn.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YjsSVrcHTHmRxTfjN86d9g_eHccI-OZ";
+const ADMIN_DASHBOARD_PATH = "./admin.html";
 
 const FALLBACK_CATEGORIES = [
   { id: "graphic-design", name: "Graphic Design" },
@@ -50,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const bottomJoinBtn = document.getElementById("bottomJoinBtn");
 
   const BUSINESS_WHATSAPP = "";
-  const cards = Array.from(providerGrid.querySelectorAll(".provider-card"));
+  const cards = Array.from(providerGrid ? providerGrid.querySelectorAll(".provider-card") : []);
   const yearElement = document.getElementById("year");
 
   if (yearElement) yearElement.textContent = new Date().getFullYear();
@@ -148,8 +149,49 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function enablePasswordToggles(container = document) {
+    if (!container) return;
     const passwordInputs = container.querySelectorAll('input[type="password"]');
     passwordInputs.forEach((input) => addPasswordToggle(input));
+  }
+
+  async function isCurrentUserAdmin() {
+    if (!supabaseClient) return false;
+    const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+    if (sessionError || !sessionData?.session) return false;
+
+    const { data, error } = await supabaseClient
+      .from("admins")
+      .select("user_id")
+      .eq("user_id", sessionData.session.user.id)
+      .maybeSingle();
+
+    return !error && !!data;
+  }
+
+  async function refreshAdminButton() {
+    const headerActions = document.querySelector(".header-actions");
+    if (!headerActions) return;
+
+    const existingBtn = document.getElementById("adminDashboardBtn");
+    const isAdmin = await isCurrentUserAdmin();
+
+    if (!isAdmin) {
+      if (existingBtn) existingBtn.remove();
+      return;
+    }
+
+    if (existingBtn) return;
+
+    const adminButton = document.createElement("button");
+    adminButton.id = "adminDashboardBtn";
+    adminButton.type = "button";
+    adminButton.className = "btn btn-outline";
+    adminButton.textContent = "Admin dashboard";
+    adminButton.addEventListener("click", () => {
+      window.location.href = ADMIN_DASHBOARD_PATH;
+    });
+
+    headerActions.insertBefore(adminButton, headerActions.firstChild);
   }
 
   async function testSupabaseConnection() {
@@ -180,6 +222,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function filterProviders() {
+    if (!providerGrid) return;
+
     const query = normalize(searchInput && searchInput.value);
     const district = normalize(locationFilter && locationFilter.value);
     const visibleCards = [];
@@ -517,6 +561,7 @@ document.addEventListener("DOMContentLoaded", () => {
             openDialog(`<h2>Welcome to SkillLink Malawi!</h2><p>Your account and provider profile have been created.</p><p class="dialog-message">Your listing is pending admin approval.</p><button class="btn btn-primary dialog-action" id="accountDone" type="button">Close</button>`);
             document.getElementById("accountDone").addEventListener("click", closeDialog);
             refreshAuthButton();
+            refreshAdminButton();
           }
         } else {
           openDialog(`<h2>Check your email</h2><p>Your sign-up request was accepted for <strong>${escapeHTML(email)}</strong>.</p><p>Supabase email confirmation is enabled. Open the confirmation email, then log in to continue.</p><button class="btn btn-primary dialog-action" id="goLogin" type="button">Log in</button>`);
@@ -577,6 +622,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const profileResult = await ensureProviderProfile(data.user);
         await refreshAuthButton();
+        await refreshAdminButton();
 
         if (!profileResult.ok) {
           openDialog(`<h2>Logged in successfully</h2><p>Your account is active, but we could not finish checking the provider profile.</p><p class="dialog-message">${escapeHTML(profileResult.message)}</p><button class="btn btn-primary dialog-action" id="loginOkay" type="button">Close</button>`);
@@ -612,7 +658,17 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    openDialog(`<span class="eyebrow">YOUR ACCOUNT</span><h2>Account details</h2><p>${escapeHTML(user.email || "Signed-in user")}</p><button class="btn btn-primary dialog-action" id="logoutBtn" type="button">Log out</button>`);
+    const isAdmin = await isCurrentUserAdmin();
+    const adminButtonMarkup = isAdmin ? '<button class="btn btn-primary dialog-action" id="adminFromAccount" type="button">Admin dashboard</button>' : '';
+
+    openDialog(`<span class="eyebrow">YOUR ACCOUNT</span><h2>Account details</h2><p>${escapeHTML(user.email || "Signed-in user")}</p>${adminButtonMarkup}<button class="btn btn-primary dialog-action" id="logoutBtn" type="button">Log out</button>`);
+
+    const adminFromAccount = document.getElementById("adminFromAccount");
+    if (adminFromAccount) {
+      adminFromAccount.addEventListener("click", () => {
+        window.location.href = ADMIN_DASHBOARD_PATH;
+      });
+    }
 
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       const { error } = await supabaseClient.auth.signOut();
@@ -622,6 +678,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       await refreshAuthButton();
+      await refreshAdminButton();
       openDialog(`<h2>You are logged out</h2><p>You can log in again whenever you need.</p><button class="btn btn-primary dialog-action" id="logoutDone" type="button">Close</button>`);
       document.getElementById("logoutDone").addEventListener("click", closeDialog);
     });
@@ -650,10 +707,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (supabaseClient) {
     supabaseClient.auth.onAuthStateChange(() => {
       refreshAuthButton();
+      refreshAdminButton();
     });
   }
 
   testSupabaseConnection();
   refreshAuthButton();
+  refreshAdminButton();
   filterProviders();
 });
