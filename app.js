@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function escapeHTML(value) {
-    return String(value == null ? "" : value).replace(/[&<>"']/g, (character) => ({
+    return String(value == null ? "" : value).replace(/[&<>\"']/g, (character) => ({
       "&": "&amp;",
       "<": "&lt;",
       ">": "&gt;",
@@ -170,24 +170,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function refreshAdminButton() {
     const headerActions = document.querySelector(".header-actions");
-    if (!headerActions) return;
+    if (!headerActions || !supabaseClient) return;
 
     const existingBtn = document.getElementById("adminDashboardBtn");
-    const isAdmin = await isCurrentUserAdmin();
+    const { data } = await supabaseClient.auth.getSession();
+    const loggedIn = !!(data && data.session);
 
-    if (!isAdmin) {
+    if (!loggedIn) {
       if (existingBtn) existingBtn.remove();
       return;
     }
 
-    if (existingBtn) return;
+    const isAdmin = await isCurrentUserAdmin();
+
+    if (existingBtn) existingBtn.remove();
 
     const adminButton = document.createElement("button");
     adminButton.id = "adminDashboardBtn";
     adminButton.type = "button";
     adminButton.className = "btn btn-outline";
-    adminButton.textContent = "Admin dashboard";
-    adminButton.addEventListener("click", () => {
+    adminButton.textContent = isAdmin ? "Admin dashboard" : "Admin";
+    adminButton.addEventListener("click", async () => {
+      if (!isAdmin) {
+        openDialog('<h2>Admin access required</h2><p>Your account is not registered as an admin for this dashboard.</p><button class="btn btn-primary dialog-action" id="adminDeniedClose" type="button">Close</button>');
+        const adminDeniedClose = document.getElementById("adminDeniedClose");
+        if (adminDeniedClose) adminDeniedClose.addEventListener("click", closeDialog);
+        return;
+      }
       window.location.href = ADMIN_DASHBOARD_PATH;
     });
 
@@ -659,13 +668,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const isAdmin = await isCurrentUserAdmin();
-    const adminButtonMarkup = isAdmin ? '<button class="btn btn-primary dialog-action" id="adminFromAccount" type="button">Admin dashboard</button>' : '';
+    const adminButtonMarkup = '<button class="btn btn-primary dialog-action" id="adminFromAccount" type="button">Admin dashboard</button>';
 
     openDialog(`<span class="eyebrow">YOUR ACCOUNT</span><h2>Account details</h2><p>${escapeHTML(user.email || "Signed-in user")}</p>${adminButtonMarkup}<button class="btn btn-primary dialog-action" id="logoutBtn" type="button">Log out</button>`);
 
     const adminFromAccount = document.getElementById("adminFromAccount");
     if (adminFromAccount) {
-      adminFromAccount.addEventListener("click", () => {
+      adminFromAccount.addEventListener("click", async () => {
+        if (!isAdmin) {
+          openDialog('<h2>Admin access required</h2><p>Your account is not registered as an admin for this dashboard.</p><button class="btn btn-primary dialog-action" id="adminDeniedClose" type="button">Close</button>');
+          const adminDeniedClose = document.getElementById("adminDeniedClose");
+          if (adminDeniedClose) adminDeniedClose.addEventListener("click", closeDialog);
+          return;
+        }
         window.location.href = ADMIN_DASHBOARD_PATH;
       });
     }
