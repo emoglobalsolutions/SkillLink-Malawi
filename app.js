@@ -107,6 +107,51 @@ document.addEventListener("DOMContentLoaded", () => {
     if (infoDialog && infoDialog.open) infoDialog.close();
   }
 
+  function addPasswordToggle(input) {
+    if (!input || input.dataset.passwordToggle === "true") return;
+
+    const wrap = document.createElement("div");
+    wrap.style.position = "relative";
+    wrap.style.display = "flex";
+    wrap.style.alignItems = "center";
+    wrap.style.width = "100%";
+
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
+
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.textContent = "Show";
+    toggle.setAttribute("aria-label", "Show password");
+    toggle.style.position = "absolute";
+    toggle.style.right = "10px";
+    toggle.style.top = "50%";
+    toggle.style.transform = "translateY(-50%)";
+    toggle.style.border = "none";
+    toggle.style.background = "transparent";
+    toggle.style.color = "#0f766e";
+    toggle.style.fontWeight = "700";
+    toggle.style.cursor = "pointer";
+    toggle.style.fontSize = "0.8rem";
+    wrap.appendChild(toggle);
+
+    input.style.paddingRight = "64px";
+    input.dataset.passwordToggle = "true";
+
+    toggle.addEventListener("click", () => {
+      const shouldShow = input.type === "password";
+      input.type = shouldShow ? "text" : "password";
+      toggle.textContent = shouldShow ? "Hide" : "Show";
+      toggle.setAttribute("aria-label", shouldShow ? "Hide password" : "Show password");
+      input.focus();
+    });
+  }
+
+  function enablePasswordToggles(container = document) {
+    const passwordInputs = container.querySelectorAll('input[type="password"]');
+    passwordInputs.forEach((input) => addPasswordToggle(input));
+  }
+
   async function testSupabaseConnection() {
     if (!supabaseClient) {
       setStatus(
@@ -402,13 +447,16 @@ document.addEventListener("DOMContentLoaded", () => {
       </form>
     `);
 
+    const joinForm = document.getElementById("joinForm");
+    enablePasswordToggles(joinForm);
+
     const categorySelect = document.getElementById("joinCategory");
     loadCategoriesInto(categorySelect).catch((error) => {
       console.error("Load service categories:", error);
       if (categorySelect) categorySelect.innerHTML = '<option value="">Could not load categories</option>';
     });
 
-    document.getElementById("joinForm").addEventListener("submit", async (event) => {
+    joinForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const form = event.currentTarget;
       const submitButton = form.querySelector('button[type="submit"]');
@@ -507,9 +555,12 @@ document.addEventListener("DOMContentLoaded", () => {
       <p class="dialog-message">Need an account? <button class="text-link" id="loginJoinLink" type="button">Create one here</button></p>
     `);
 
+    const loginForm = document.getElementById("loginForm");
+    enablePasswordToggles(loginForm);
+
     document.getElementById("loginJoinLink").addEventListener("click", showJoinForm);
 
-    document.getElementById("loginForm").addEventListener("submit", async (event) => {
+    loginForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const form = event.currentTarget;
       const submitButton = form.querySelector('button[type="submit"]');
