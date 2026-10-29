@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillLink Malawi Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      :root {
+        --bg: #f5f7f6;
+        --card: #ffffff;
+        --primary: #103d32;
+        --primary-soft: #dff6f1;
+        --text: #1f2937;
+        --muted: #667085;
+        --border: #d7e2e0;
+        --danger: #b42318;
+        --success: #067647;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .shell {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 20px 60px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        gap: 16px;
+      }
+
+      .brand {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      .nav {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .btn {
+        appearance: none;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 16px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 8px 30px rgba(16, 61, 50, 0.04);
+      }
+
+      h1, h2, h3, p {
+        margin-top: 0;
+      }
+
+      form {
+        display: grid;
+        gap: 14px;
+        max-width: 420px;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 1rem;
+      }
+
+      .panel {
+        display: none;
+      }
+
+      .panel.visible {
+        display: block;
+      }
+
+      .provider-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 16px;
+      }
+
+      .provider-item {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 18px;
+        background: #fff;
+      }
+
+      .provider-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .provider-meta {
+        color: var(--muted);
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .approve {
+        background: var(--success);
+        color: #fff;
+      }
+
+      .reject {
+        background: var(--danger);
+        color: #fff;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .status {
+        display: inline-block;
+        background: #fff4d6;
+        color: #7c4a08;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 5px 8px;
+        border-radius: 999px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="topbar">
+        <a href="./index.html" class="brand">SkillLink Malawi</a>
+        <div class="nav">
+          <a href="./index.html" class="btn btn-secondary">Back to site</a>
+          <button id="logoutAdminBtn" class="btn btn-secondary" type="button" hidden>Log out</button>
+        </div>
+      </div>
+
+      <section id="loginSection" class="card">
+        <h1>Admin access</h1>
+        <p class="muted">Approve provider applications before they go live.</p>
+        <form id="adminLoginForm">
+          <label>
+            <span>Email</span>
+            <input id="adminEmail" type="email" placeholder="admin@example.com" required />
+          </label>
+          <label>
+            <span>Password</span>
+            <input id="adminPassword" type="password" placeholder="Password" required />
+          </label>
+          <button class="btn btn-primary" type="submit">Login to admin dashboard</button>
+        </form>
+      </section>
+
+      <section id="adminPanel" class="card panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+          <div>
+            <span class="status">ADMIN MODE</span>
+            <h2 style="margin:10px 0 0;">Pending provider approvals</h2>
+          </div>
+          <button id="refreshAdminBtn" class="btn btn-secondary" type="button">Refresh</button>
+        </div>
+        <ul id="pendingProvidersList" class="provider-list"></ul>
+      </section>
+    </div>
+
+    <script>
+      const SUPABASE_URL = "https://dhlwmbvaxrqbtqxqyjwn.supabase.co";
+      const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YjsSVrcHTHmRxTfjN86d9g_eHccI-OZ";
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+      const loginSection = document.getElementById("loginSection");
+      const adminPanel = document.getElementById("adminPanel");
+      const adminLoginForm = document.getElementById("adminLoginForm");
+      const pendingProvidersList = document.getElementById("pendingProvidersList");
+      const logoutAdminBtn = document.getElementById("logoutAdminBtn");
+      const refreshAdminBtn = document.getElementById("refreshAdminBtn");
+
+      async function isAdminUser() {
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError || !sessionData?.session) return false;
+
+        const { data, error } = await supabase
+          .from("admins")
+          .select("user_id")
+          .eq("user_id", sessionData.session.user.id)
+          .maybeSingle();
+
+        return !error && !!data;
+      }
+
+      function showLogin() {
+        loginSection.classList.remove("hidden");
+        adminPanel.classList.remove("visible");
+        loginSection.style.display = "block";
+        adminPanel.style.display = "none";
+        logoutAdminBtn.hidden = true;
+      }
+
+      function showDashboard() {
+        loginSection.style.display = "none";
+        adminPanel.classList.add("visible");
+        adminPanel.style.display = "block";
+        logoutAdminBtn.hidden = false;
+      }
+
+      async function loadPendingProviders() {
+        const { data, error } = await supabase
+          .from("providers")
+          .select("*")
+          .eq("is_approved", false)
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error(error);
+          pendingProvidersList.innerHTML = `<li class="provider-item"><strong>Error:</strong> ${error.message}</li>`;
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          pendingProvidersList.innerHTML = "<li class=\"provider-item\">No pending provider applications right now.</li>";
+          return;
+        }
+
+        pendingProvidersList.innerHTML = data.map((provider) => `
+          <li class="provider-item">
+            <div class="provider-header">
+              <h3>${provider.business_name || "Unnamed business"}</h3>
+              <span class="status">Pending</span>
+            </div>
+            <div class="provider-meta">
+              <div><strong>Owner:</strong> ${provider.full_name || "Not provided"}</div>
+              <div><strong>Email:</strong> ${provider.email || "Not provided"}</div>
+              <div><strong>Phone:</strong> ${provider.phone || "Not provided"}</div>
+              <div><strong>District:</strong> ${provider.district || "Not provided"}</div>
+              <div><strong>Category ID:</strong> ${provider.category_id || "Not provided"}</div>
+              <div><strong>Description:</strong> ${provider.description || "No description provided"}</div>
+            </div>
+            <div class="actions">
+              <button class="btn approve" type="button" data-action="approve" data-user-id="${provider.user_id}">Approve</button>
+              <button class="btn reject" type="button" data-action="reject" data-user-id="${provider.user_id}">Reject</button>
+            </div>
+          </li>
+        `).join("");
+
+        const actionButtons = pendingProvidersList.querySelectorAll("button[data-action]");
+        actionButtons.forEach((button) => {
+          button.addEventListener("click", async () => {
+            const action = button.dataset.action;
+            const userId = button.dataset.userId;
+
+            if (action === "approve") {
+              const { error } = await supabase
+                .from("providers")
+                .update({ is_approved: true })
+                .eq("user_id", userId);
+
+              if (error) {
+                alert("Approval failed: " + error.message);
+                return;
+              }
+
+              alert("Provider approved successfully.");
+              await loadPendingProviders();
+              return;
+            }
+
+            const { error } = await supabase
+              .from("providers")
+              .delete()
+              .eq("user_id", userId);
+
+            if (error) {
+              alert("Reject failed: " + error.message);
+              return;
+            }
+
+            alert("Provider rejected and removed.");
+            await loadPendingProviders();
+          });
+        });
+      }
+
+      async function initializeAdminPage() {
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (!sessionData.session) {
+          showLogin();
+          return;
+        }
+
+        const admin = await isAdminUser();
+        if (!admin) {
+          alert("This account is not allowed to access the admin dashboard.");
+          await supabase.auth.signOut();
+          showLogin();
+          return;
+        }
+
+        showDashboard();
+        loadPendingProviders();
+      }
+
+      adminLoginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById("adminEmail").value.trim();
+        const password = document.getElementById("adminPassword").value;
+
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          alert(error.message);
+          return;
+        }
+
+        const admin = await isAdminUser();
+        if (!admin) {
+          alert("This account is not an admin user.");
+          await supabase.auth.signOut();
+          showLogin();
+          return;
+        }
+
+        showDashboard();
+        loadPendingProviders();
+      });
+
+      logoutAdminBtn.addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        showLogin();
+      });
+
+      refreshAdminBtn.addEventListener("click", async () => {
+        await loadPendingProviders();
+      });
+
+      initializeAdminPage();
+    </script>
+  </body>
+</html>
